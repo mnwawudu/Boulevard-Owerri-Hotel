@@ -11,6 +11,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;  // Default to 5000 if not specified in environment
 
+// Mongoose strict query warning fix
+mongoose.set('strictQuery', false);  // Change to 'true' to suppress the warning
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());  // Handle JSON data
