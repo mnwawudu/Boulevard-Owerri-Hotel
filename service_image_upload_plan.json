@@ -1,0 +1,63 @@
+{
+  "Restaurant": {
+    "mainImage": "boulevard_images/restaurant.jpg",
+    "images": [
+      "boulevard_images/restaurant.jpg",
+      "boulevard_images/restaurant1.jpg",
+      "boulevard_images/restaurant2.jpg",
+      "boulevard_images/restaurant3.jpg"
+    ]
+  },
+  "Coffee Bar": {
+    "mainImage": "boulevard_images/coffee-bar.jpg",
+    "images": [
+      "boulevard_images/coffee-bar.jpg",
+      "boulevard_images/coffee bar 1.jpg"
+    ]
+  },
+  "Casino": {
+    "mainImage": "boulevard_images/casino.jpg",
+    "images": [
+      "boulevard_images/casino.jpg",
+      "boulevard_images/casino1.jpg",
+      "boulevard_images/casino2.jpg"
+    ]
+  },
+  "Conference & Meeting": {
+    "mainImage": "boulevard_images/conference and meeting.jpg",
+    "images": [
+      "boulevard_images/conference and meeting.jpg",
+      "boulevard_images/conference-meeting1.jpg"
+    ]
+  },
+  "Gym": {
+    "mainImage": "boulevard_images/gym.jpg",
+    "images": [
+      "boulevard_images/gym.jpg",
+      "boulevard_images/gym1.jpg"
+    ]
+  },
+  "City Cruise": {
+    "mainImage": "boulevard_images/city cruise1.jpg",
+    "images": [
+      "boulevard_images/city cruise1.jpg",
+      "boulevard_images/city cruise2.jpg",
+      "boulevard_images/city-cruise.jpg"
+    ]
+  },
+  "Pickup and Drop-off": {
+    "mainImage": "boulevard_images/pick-off and drop-off.jpg",
+    "images": [
+      "boulevard_images/pick-off and drop-off.jpg"
+    ]
+  },
+  "Pool Bar": {
+    "mainImage": "boulevard_images/pool bar.jpg",
+    "images": [
+      "boulevard_images/pool bar.jpg",
+      "boulevard_images/pool bar 1.jpg",
+      "boulevard_images/carousel2.jpg",
+      "boulevard_images/carousel5.jpg"
+    ]
+  }
+}
