@@ -1,21 +1,44 @@
+// routes/adminAuthRoutes.js
 const express = require('express');
-const router = express.Router();
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-router.post('/login', (req, res) => {
-  const { username, password } = req.body;
+const router = express.Router();
 
-  const adminUsername = process.env.ADMIN_USERNAME;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
 
-  if (username === adminUsername && password === adminPassword) {
-    const token = jwt.sign({ username, isAdmin: true }, process.env.JWT_SECRET, {
+  try {
+    const admin = await User.findOne({ email });
+
+    if (!admin) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const isMatch = await bcrypt.compare(password, admin.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET, {
       expiresIn: '3h'
     });
-    return res.status(200).json({ token });
-  }
 
-  return res.status(401).json({ message: 'Invalid credentials' });
+    res.status(200).json({
+      token,
+      admin: {
+        name: admin.name,
+        email: admin.email,
+        role: admin.role
+      }
+    });
+
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 module.exports = router;
