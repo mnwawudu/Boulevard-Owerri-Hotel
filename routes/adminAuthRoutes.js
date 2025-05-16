@@ -1,4 +1,3 @@
-// routes/adminAuthRoutes.js
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -9,8 +8,12 @@ const router = express.Router();
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
+  // ✅ Debug logs
+  console.log('📥 Login Attempt:', email);
+
   try {
     const admin = await User.findOne({ email });
+    console.log('🔍 Found Admin:', admin);
 
     if (!admin) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -36,7 +39,7 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Login error:', err);
+    console.error('❌ Login error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
