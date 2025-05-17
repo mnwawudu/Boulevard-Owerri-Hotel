@@ -7,7 +7,15 @@ const app = express();
 
 // ✅ Middleware
 app.use(cors());
-app.use(express.json());
+
+// For webhook route, parse raw body; for others, parse JSON normally
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/paystack/webhook') {
+    express.raw({ type: 'application/json' })(req, res, next);
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
 // ✅ MongoDB Connection
 mongoose.set('strictQuery', true);
@@ -29,6 +37,7 @@ const adminAdRoutes = require('./routes/adminAdRoutes');
 const transportRoutes = require('./routes/transportRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const adminAuthRoutes = require('./routes/adminAuthRoutes'); // ✅ Admin login
+const paystackWebhookRoutes = require('./routes/paystackWebhook'); // Add your webhook route
 
 // ✅ Route Registrations
 app.use('/api/admin', roomRoutes);                    // Rooms
@@ -41,6 +50,9 @@ app.use('/api/bookings', bookingRoutes);              // Bookings
 app.use('/api/analytics', analyticsRoutes);           // Analytics
 app.use('/api/public', publicAvailabilityRoutes);     // Public endpoints
 app.use('/api/payments', paymentRoutes);              // Payments
+
+// Register webhook route (make sure path matches your webhook endpoint)
+app.use('/api/paystack', paystackWebhookRoutes);
 
 // ✅ Catch-All for Undefined API Routes
 app.use((req, res) => {

@@ -1,0 +1,126 @@
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
+import axios from 'axios';
+import AdBanner from '../AdBanner';
+import './ServicesExtra.css';
+
+const API_BASE = 'https://boulevard-owerri-hotel.onrender.com/api/admin';
+
+const Lightbox = ({ images, currentIndex, closeLightbox, nextImage, prevImage, isLastImage, isFirstImage }) => {
+  return (
+    <div className="lightbox-overlay" onClick={closeLightbox}>
+      <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+        <img src={images[currentIndex]} alt="Service" className="lightbox-image" />
+        <div className="lightbox-navigation">
+          <button className="lightbox-nav-btn" onClick={prevImage} disabled={isFirstImage}>❮</button>
+          <button className="lightbox-nav-btn" onClick={nextImage} disabled={isLastImage}>❯</button>
+        </div>
+        <button className="lightbox-close-btn" onClick={closeLightbox}>Close</button>
+      </div>
+    </div>
+  );
+};
+
+const Services = () => {
+  const [services, setServices] = useState([]);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [currentImages, setCurrentImages] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get(`${API_BASE}/services`);
+        setServices(res.data);
+      } catch (err) {
+        console.error('Failed to fetch services:', err);
+      }
+    };
+    fetchServices();
+  }, []);
+
+  const openLightbox = (images) => {
+    setCurrentImages(images);
+    setCurrentIndex(0);
+    setIsLightboxOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  const nextImage = () => {
+    if (currentIndex < currentImages.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const isLastImage = currentIndex === currentImages.length - 1;
+  const isFirstImage = currentIndex === 0;
+
+  return (
+    <div className="services-container">
+      <Helmet>
+        <title>Our Services - Boulevard Hotel Owerri</title>
+        <meta name="description" content="Explore our premium services at the most luxurious hotel in Owerri. From dining to events, we offer unmatched hospitality." />
+        <meta property="og:title" content="Services - Best Hotel in Owerri" />
+        <meta property="og:description" content="Discover luxury services at Boulevard Hotel in Owerri — a secure, elegant, and guest-centered experience." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://boulevardhotel.com/services" />
+        <meta property="og:image" content="/images/services-banner.jpg" />
+      </Helmet>
+
+      <AdBanner page="services" />
+
+      <div className="services-intro">
+        <h1>Our Services</h1>
+        <p>
+          At Boulevard Owerri Hotel, we provide the best hotel in Owerri with a wide range of premium services designed to offer you an unforgettable stay. Whether you're visiting for business or leisure, our luxurious hotel in Owerri ensures comfort and sophistication with world-class amenities and exceptional hospitality. Explore our exclusive services that are tailored to meet your every need and elevate your stay with us.
+        </p>
+      </div>
+
+      <section className="services-section" style={{ paddingTop: '40px' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Services List</h2>
+        <div className="services-grid">
+          {services.map((service, index) => (
+            <div key={index} className="service-card">
+              <img src={service.mainImage || (service.images[0]?.url)} alt={service.name} className="service-img" />
+              <div className="service-text">
+                <h3>{service.name}</h3>
+                <p>{service.description}</p>
+                <button
+                  className="service-button"
+                  onClick={() => openLightbox(service.images.map(i => i.url))}
+                >
+                  View More
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {isLightboxOpen && (
+        <Lightbox
+          images={currentImages}
+          currentIndex={currentIndex}
+          closeLightbox={closeLightbox}
+          nextImage={nextImage}
+          prevImage={prevImage}
+          isLastImage={isLastImage}
+          isFirstImage={isFirstImage}
+        />
+      )}
+    </div>
+  );
+};
+
+export default Services;
